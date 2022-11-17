@@ -49,7 +49,22 @@ function fetchCatPics(picArr, callback) {
   });
 }
 
-function fetchAllCats() {}
+function fetchAllCats(callback) {
+  const allCats = []
+fetchAllOwners((err, owners) => {
+  if (err) callback(err)
+  else owners.forEach((owner) => {
+  fetchCatsByOwner(owner, (err, cats) => {
+    if (err) callback(err)
+    allCats.push(cats)
+    if (allCats.length === owners.length) {
+      const flatCats = allCats.flat()
+      callback(null, flatCats.sort())
+    }
+  })
+ })
+})
+}
 
 function fetchOwnersWithCats() {}
 
