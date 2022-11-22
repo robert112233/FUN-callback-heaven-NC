@@ -8,3 +8,8 @@ request is a function that we've created to help make requests across the intern
  - request takes as its first argument: a url like above
  - and as its second argument: a callback function that gives you access to the data
 */
+
+request('https://icanhazdadjoke.com/', (err, data) => {
+  if (err) console.log(err);
+  console.log(data);
+});

@@ -170,7 +170,7 @@ describe('fetchCatPics()', () => {
   });
 });
 
-describe.only('fetchAllCats()', () => {
+describe('fetchAllCats()', () => {
   test('invokes the callback with no error', done => {
     function testCB(err) {
       expect(err).toBe(null);
@@ -196,7 +196,7 @@ describe.only('fetchAllCats()', () => {
   });
 });
 
-describe.only('fetchOwnersWithCats()', () => {
+describe('fetchOwnersWithCats()', () => {
   test('invokes the callback function with no error', done => {
     function testCB(err) {
       expect(err).toBe(null);

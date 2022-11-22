@@ -50,27 +50,57 @@ function fetchCatPics(picArr, callback) {
 }
 
 function fetchAllCats(callback) {
-  const allCats = []
-fetchAllOwners((err, owners) => {
-  if (err) callback(err)
-  else owners.forEach((owner) => {
-  fetchCatsByOwner(owner, (err, cats) => {
-    if (err) callback(err)
-    allCats.push(cats)
-    if (allCats.length === owners.length) {
-      const flatCats = allCats.flat()
-      callback(null, flatCats.sort())
-    }
-  })
- })
-})
+  const allCats = [];
+  fetchAllOwners((err, owners) => {
+    if (err) callback(err);
+    else
+      owners.forEach(owner => {
+        fetchCatsByOwner(owner, (err, cats) => {
+          if (err) callback(err);
+          allCats.push(cats);
+          if (allCats.length === owners.length) {
+            const flatCats = allCats.flat();
+            callback(null, flatCats.sort());
+          }
+        });
+      });
+  });
 }
 
-function fetchOwnersWithCats() {}
+function fetchOwnersWithCats(callback) {
+  const arrOfOwnerObjs = [];
+  fetchAllOwners((err, ownerData) => {
+    if (err) console.log(err);
+    ownerData.forEach((catOwner, index) => {
+      fetchCatsByOwner(catOwner, (err, catData) => {
+        arrOfOwnerObjs[index] = { owner: catOwner, cats: catData };
+        if (
+          arrOfOwnerObjs.length === ownerData.length &&
+          arrOfOwnerObjs.includes(undefined) === false
+        ) {
+          console.log(arrOfOwnerObjs);
+          callback(err, arrOfOwnerObjs);
+        }
+      });
+    });
+  });
+}
 
-function kickLegacyServerUntilItWorks() {}
+function kickLegacyServerUntilItWorks(callback) {
+  request(`/legacy-status`, (err, data) => {
+    if (err) kickLegacyServerUntilItWorks(callback);
+    else callback(err, data);
+  });
+}
 
-function buySingleOutfit() {}
+function buySingleOutfit(outfit, callback) {
+  let hasBeenCalled = false;
+  request(`/outfits/${outfit}`, (err, data) => {
+    if (err) callback(err);
+    else if (!hasBeenCalled) callback(err, data);
+    hasBeenCalled = true;
+  });
+}
 
 module.exports = {
   buySingleOutfit,
